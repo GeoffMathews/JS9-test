@@ -1,0 +1,56 @@
+{
+  "objects": [
+    {
+      "id": "m01",
+      "name": "Mystery 01",
+      "images": [
+        {
+          "filter": "B",
+          "file": "images/Mystery_01_B.fits"
+        },
+        {
+          "filter": "V",
+          "file": "images/Mystery_01_V.fits"
+        },
+        {
+          "filter": "R",
+          "file": "images/Mystery_01_R.fits"
+        },
+        {
+          "filter": "H-alpha",
+          "file": "images/Mystery_01_Halpha.fits"
+        },
+        {
+          "filter": "OIII",
+          "file": "images/Mystery_01_OIII.fits"
+        }
+      ]
+    },
+    {
+      "id": "m02",
+      "name": "Mystery 02",
+      "images": [
+        {
+          "filter": "B",
+          "file": "images/Mystery_02_B.fits"
+        },
+        {
+          "filter": "V",
+          "file": "images/Mystery_02_V.fits"
+        },
+        {
+          "filter": "R",
+          "file": "images/Mystery_02_R.fits"
+        },
+        {
+          "filter": "H-alpha",
+          "file": "images/Mystery_02_Halpha.fits"
+        },
+        {
+          "filter": "OIII",
+          "file": "images/Mystery_02_OIII.fits"
+        }
+      ]
+    }
+  ]
+}
