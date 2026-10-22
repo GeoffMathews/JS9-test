@@ -3,16 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Student JS9 Astronomy Workbench</title>
+  <title>JS9 Workbench - Step 1</title>
 
-  <!-- JS9 CSS Dependencies -->
+  <!-- JS9 CSS -->
   <link type="text/css" rel="stylesheet" href="https://js9.si.edu/js9/js9support.css">
   <link type="text/css" rel="stylesheet" href="https://js9.si.edu/js9/js9.css">
 
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background-color: #121212;
       color: #e0e0e0;
       height: 100vh;
@@ -20,9 +21,9 @@
       overflow: hidden;
     }
 
-    /* Left Sidebar Workflow Container */
+    /* Left Sidebar Container */
     #sidebar {
-      width: 360px;
+      width: 320px;
       background-color: #1e1e1e;
       border-right: 1px solid #333;
       display: flex;
@@ -34,14 +35,14 @@
     }
 
     .app-title {
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       font-weight: 700;
       color: #61dafb;
       padding-bottom: 8px;
       border-bottom: 1px solid #333;
     }
 
-    /* Accordion Step Card Styling */
+    /* Sidebar Step Sections */
     .step-card {
       background: #282828;
       border: 1px solid #383838;
@@ -54,7 +55,7 @@
 
     .step-header {
       font-weight: 600;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       color: #fff;
       display: flex;
       align-items: center;
@@ -74,82 +75,18 @@
       font-weight: bold;
     }
 
-    /* Controls & Buttons */
-    button, select {
+    /* Placeholder / Inactive Control Elements */
+    button, select, input[type="range"] {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    button {
       background: #3a3a3a;
       color: #fff;
       border: 1px solid #555;
       padding: 8px 12px;
       border-radius: 4px;
-      cursor: pointer;
-      font-size: 0.85rem;
-      transition: background 0.2s;
-    }
-    button:hover { background: #4a4a4a; }
-    button:disabled { opacity: 0.5; cursor: not-allowed; }
-
-    /* Loaded Images List */
-    .image-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .image-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: #1e1e1e;
-      padding: 8px 10px;
-      border-radius: 4px;
-      border: 1px solid #333;
-    }
-    .image-item.active {
-      border-color: #61dafb;
-      background: #223038;
-    }
-
-    .image-label {
-      font-size: 0.85rem;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      cursor: pointer;
-      flex-grow: 1;
-    }
-
-    .active-eye {
-      color: #61dafb;
-      font-size: 0.9rem;
-      visibility: hidden;
-    }
-    .image-item.active .active-eye { visibility: visible; }
-
-    .color-select {
-      font-size: 0.75rem;
-      padding: 2px 4px;
-      background: #2a2a2a;
-    }
-
-    .btn-close {
-      background: #444;
-      color: #ccc;
-      border: none;
-      padding: 2px 7px;
-      border-radius: 3px;
-      margin-left: 6px;
-      font-weight: bold;
-    }
-    .btn-close:hover { background: #e81123; color: #fff; }
-
-    /* Scaling Controls */
-    .scale-toggle {
-      display: flex;
-      gap: 10px;
-      align-items: center;
       font-size: 0.85rem;
     }
 
@@ -157,23 +94,24 @@
       display: flex;
       flex-direction: column;
       gap: 4px;
+      font-size: 0.75rem;
+      color: #aaa;
     }
-    .range-group label { font-size: 0.75rem; color: #aaa; }
 
     .range-row {
       display: flex;
       align-items: center;
       gap: 8px;
     }
+
     .range-row input[type="range"] { flex: 1; }
     .range-row input[type="number"] {
-      width: 75px;
+      width: 60px;
       background: #181818;
       border: 1px solid #444;
       color: #fff;
-      padding: 4px;
+      padding: 3px;
       border-radius: 3px;
-      font-size: 0.8rem;
     }
 
     .btn-grid {
@@ -182,482 +120,143 @@
       gap: 8px;
     }
 
-    /* Modal / Popup File Selector */
-    .modal-overlay {
-      position: fixed;
-      top:0; left:0; width: 100vw; height: 100vh;
-      background: rgba(0,0,0,0.7);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-    }
-    .modal-overlay.open { display: flex; }
-
-    .modal-box {
-      background: #252525;
-      border: 1px solid #444;
-      border-radius: 8px;
-      width: 450px;
-      max-height: 80vh;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-    }
-
-    .modal-header {
-      padding: 12px 16px;
-      background: #1e1e1e;
-      border-bottom: 1px solid #333;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-weight: bold;
-    }
-
-    .modal-body {
-      padding: 16px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-
-    .object-group-title {
-      font-size: 0.95rem;
-      color: #61dafb;
-      margin-bottom: 6px;
-    }
-
-    .filter-btn-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-
-    /* Main JS9 Viewport Area */
+    /* Main Display Area */
     #main-content {
       flex: 1;
       display: flex;
       flex-direction: column;
       background-color: #050505;
-      padding: 10px;
+      padding: 15px;
       overflow: auto;
     }
 
-    .JS9Menubar { border-radius: 4px 4px 0 0; }
-    .JS9 { border-radius: 0 0 4px 4px; }
+    #status-msg {
+      font-size: 0.85rem;
+      color: #888;
+      margin-bottom: 10px;
+    }
   </style>
 </head>
 <body>
 
-  <!-- Left Edge Workflow Sidebar -->
+  <!-- Sidebar (Layout only for now) -->
   <div id="sidebar">
-    <div class="app-title">JS9 Image Processor</div>
+    <div class="app-title">JS9 Astronomy Workbench</div>
 
-    <!-- Step 1: File Selection -->
+    <!-- Step 1 -->
     <div class="step-card">
       <div class="step-header">
         <span class="step-number">1</span>
         <span>File Selection</span>
       </div>
-      <button id="btn-open-modal">➕ Select Image to Load</button>
+      <button disabled> Select Image...</button>
     </div>
 
-    <!-- Step 2: Loaded Images Manager -->
+    <!-- Step 2 -->
     <div class="step-card">
       <div class="step-header">
         <span class="step-number">2</span>
         <span>Loaded Images</span>
       </div>
-      <div id="loaded-images-list" class="image-list">
-        <div style="font-size: 0.8rem; color: #888;">No images loaded yet.</div>
-      </div>
+      <div style="font-size: 0.8rem; color: #888;">No active image controls yet.</div>
     </div>
 
-    <!-- Step 3: Adjust Scaling -->
+    <!-- Step 3 -->
     <div class="step-card">
       <div class="step-header">
         <span class="step-number">3</span>
         <span>Adjust Scaling</span>
       </div>
-      
-      <div class="scale-toggle">
-        <label><input type="radio" name="scaleType" value="linear"> Linear</label>
-        <label><input type="radio" name="scaleType" value="log" checked> Logarithmic</label>
+      <div style="font-size: 0.85rem;">
+        <label><input type="radio" name="scale" disabled checked> Logarithmic</label>
+        <label><input type="radio" name="scale" disabled> Linear</label>
       </div>
-
       <div class="range-group">
-        <label>Low Brightness Limit (z1)</label>
+        <label>Low Limit</label>
         <div class="range-row">
-          <input type="range" id="slider-low" step="any">
-          <input type="number" id="input-low" step="any">
+          <input type="range" disabled>
+          <input type="number" disabled placeholder="0">
         </div>
       </div>
-
       <div class="range-group">
-        <label>High Brightness Limit (z2)</label>
+        <label>High Limit</label>
         <div class="range-row">
-          <input type="range" id="slider-high" step="any">
-          <input type="number" id="input-high" step="any">
+          <input type="range" disabled>
+          <input type="number" disabled placeholder="1000">
         </div>
       </div>
     </div>
 
-    <!-- Step 4: Labels -->
+    <!-- Step 4 -->
     <div class="step-card">
       <div class="step-header">
         <span class="step-number">4</span>
-        <span>Labels & Markings</span>
+        <span>Labels</span>
       </div>
       <div class="btn-grid">
-        <button onclick="addCircleRegion()">⭕ Add Circle</button>
-        <button onclick="addTextRegion()">🔤 Add Text</button>
+        <button disabled>Add Circle</button>
+        <button disabled>Add Text</button>
       </div>
-      <button style="background: #5a2525; border-color: #773333;" onclick="clearAllRegions()">🗑️ Delete All Regions</button>
+      <button disabled>Delete All Regions</button>
     </div>
 
-    <!-- Step 5: Measure -->
+    <!-- Step 5 -->
     <div class="step-card">
       <div class="step-header">
         <span class="step-number">5</span>
-        <span>Measure & Analyze</span>
+        <span>Measure</span>
       </div>
       <div class="btn-grid">
-        <button onclick="addLineRegion()">📏 Add Line</button>
-        <button onclick="runRegionStats()">📊 Region Stats</button>
+        <button disabled>Add Line</button>
+        <button disabled>Region Stats</button>
       </div>
     </div>
   </div>
 
-  <!-- Main Viewport Area with JS9 -->
+  <!-- Main JS9 Viewport -->
   <div id="main-content">
+    <div id="status-msg">Initializing JS9 and reading manifest...</div>
+    
     <div class="JS9Menubar" id="JS9Menubar"></div>
     <div class="JS9" id="JS9"></div>
   </div>
 
-  <!-- File Selection Modal Popup -->
-  <div class="modal-overlay" id="file-modal">
-    <div class="modal-box">
-      <div class="modal-header">
-        <span>Select Telescope Image</span>
-        <button class="btn-close" onclick="closeModal()">✕</button>
-      </div>
-      <div class="modal-body" id="modal-object-list">
-        <!-- Dynamically populated from JSON -->
-      </div>
-    </div>
-  </div>
-
-  <!-- JS9 JavaScript Dependencies -->
+  <!-- JS9 Scripts -->
   <script type="text/javascript" src="https://js9.si.edu/js9/js9support.min.js"></script>
   <script type="text/javascript" src="https://js9.si.edu/js9/js9.min.js"></script>
   <script type="text/javascript" src="https://js9.si.edu/js9/js9plugins.js"></script>
 
   <script>
-    // Application State Management
-    let loadedImages = []; // Array of { id, objectId, objectName, filterName, filename, assignedColor }
-    let activeImageId = null;
-    let catalogData = null;
-
-    // Fetch JSON manifest on initialization
+    // Read images.json and load the first image automatically
     window.addEventListener('DOMContentLoaded', () => {
+      const statusMsg = document.getElementById('status-msg');
+
       fetch('images.json')
-        .then(res => res.json())
-        .then(data => {
-          catalogData = data;
-          renderModalCatalog(data);
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`Failed to load images.json (HTTP ${response.status})`);
+          }
+          return response.json();
         })
-        .catch(err => {
-          console.warn("Could not load images.json file. Modal will use fallback standard manifest.", err);
-        });
+        .then(data => {
+          // Extract the first file path
+          const firstObject = data?.objects?.[0];
+          const firstImage = firstObject?.images?.[0];
 
-      setupScaleListeners();
+          if (firstImage && firstImage.file) {
+            statusMsg.textContent = `Loading default image: ${firstObject.name || ''} (${firstImage.filter || ''}) - ${firstImage.file}`;
+            
+            // Send file to JS9 display
+            JS9.Load(firstImage.file);
+          } else {
+            statusMsg.textContent = 'Error: images.json was read, but no valid images were found.';
+          }
+        })
+        .catch(error => {
+          statusMsg.textContent = `Error: ${error.message}. Make sure images.json exists and you are running a local web server.`;
+          console.error(error);
+        });
     });
-
-    // --- Modal Handler ---
-    const modal = document.getElementById('file-modal');
-    document.getElementById('btn-open-modal').onclick = () => modal.classList.add('open');
-    function closeModal() { modal.classList.remove('open'); }
-
-    function renderModalCatalog(data) {
-      const container = document.getElementById('modal-object-list');
-      container.innerHTML = '';
-
-      data.objects.forEach(obj => {
-        const group = document.createElement('div');
-        group.className = 'object-group';
-
-        const title = document.createElement('div');
-        title.className = 'object-group-title';
-        title.textContent = obj.name;
-        group.appendChild(title);
-
-        const btnList = document.createElement('div');
-        btnList.className = 'filter-btn-list';
-
-        obj.images.forEach(img => {
-          const btn = document.createElement('button');
-          btn.textContent = img.filter;
-          btn.onclick = () => {
-            loadImage(obj.id, obj.name, img.filter, img.file);
-            closeModal();
-          };
-          btnList.appendChild(btn);
-        });
-
-        group.appendChild(btnList);
-        container.appendChild(group);
-      });
-    }
-
-    // --- JS9 Image Loading & Management ---
-    function loadImage(objectId, objectName, filterName, filepath) {
-      // Check if image is already loaded
-      const existing = loadedImages.find(img => img.filename === filepath);
-      if (existing) {
-        setActiveImage(existing.id);
-        return;
-      }
-
-      // Generate clean internal ID
-      const imageId = 'img_' + Math.random().toString(36).substr(2, 9);
-      
-      const newImg = {
-        id: imageId,
-        objectId: objectId,
-        objectName: objectName,
-        filterName: filterName,
-        filename: filepath,
-        assignedColor: 'grey'
-      };
-
-      loadedImages.push(newImg);
-
-      // Load FITS into JS9 display
-      JS9.Load(filepath, {
-        id: imageId,
-        onload: () => {
-          setActiveImage(imageId);
-          updateImageScaleUI();
-        }
-      });
-
-      renderLoadedImagesUI();
-    }
-
-    function setActiveImage(id) {
-      activeImageId = id;
-      const imgObj = loadedImages.find(i => i.id === id);
-      if (imgObj) {
-        JS9.SetImage(id);
-      }
-      renderLoadedImagesUI();
-      updateImageScaleUI();
-    }
-
-    function closeImage(id, event) {
-      if (event) event.stopPropagation();
-      
-      JS9.CloseImage(id);
-      loadedImages = loadedImages.filter(img => img.id !== id);
-
-      if (activeImageId === id) {
-        activeImageId = loadedImages.length > 0 ? loadedImages[loadedImages.length - 1].id : null;
-      }
-
-      evaluateRGBState();
-      renderLoadedImagesUI();
-      updateImageScaleUI();
-    }
-
-    // --- Color Scheme & RGB Rules Engine ---
-    function changeImageColor(id, newColor) {
-      const targetImg = loadedImages.find(i => i.id === id);
-      if (!targetImg) return;
-
-      const oldColor = targetImg.assignedColor;
-      targetImg.assignedColor = newColor;
-
-      if (newColor !== 'grey') {
-        // Rule 1: Reset images of any DIFFERENT object to grayscale
-        loadedImages.forEach(img => {
-          if (img.objectId !== targetImg.objectId && img.assignedColor !== 'grey') {
-            img.assignedColor = 'grey';
-            JS9.SetColormap('grey', { display: img.id });
-          }
-        });
-
-        // Rule 2: If color is already assigned to another image of the same object, reset the earlier image to grayscale
-        loadedImages.forEach(img => {
-          if (img.id !== id && img.assignedColor === newColor) {
-            img.assignedColor = 'grey';
-            JS9.SetColormap('grey', { display: img.id });
-          }
-        });
-      }
-
-      // Apply colormap in JS9
-      JS9.SetColormap(newColor, { display: id });
-
-      // Evaluate whether RGB mode needs to be activated or deactivated
-      evaluateRGBState();
-      renderLoadedImagesUI();
-    }
-
-    function evaluateRGBState() {
-      const hasColor = loadedImages.some(img => img.assignedColor !== 'grey');
-      JS9.SetRGBMode(hasColor);
-    }
-
-    // --- UI Renderers ---
-    function renderLoadedImagesUI() {
-      const container = document.getElementById('loaded-images-list');
-      container.innerHTML = '';
-
-      if (loadedImages.length === 0) {
-        container.innerHTML = '<div style="font-size: 0.8rem; color: #888;">No images loaded yet.</div>';
-        return;
-      }
-
-      loadedImages.forEach(img => {
-        const item = document.createElement('div');
-        item.className = `image-item ${img.id === activeImageId ? 'active' : ''}`;
-        item.onclick = () => setActiveImage(img.id);
-
-        const label = document.createElement('div');
-        label.className = 'image-label';
-        label.innerHTML = `<span class="active-eye">👁</span> <span>${img.objectName} (${img.filterName})</span>`;
-
-        const controls = document.createElement('div');
-        controls.style.display = 'flex';
-        controls.style.alignItems = 'center';
-
-        const colorSelect = document.createElement('select');
-        colorSelect.className = 'color-select';
-        ['grey', 'red', 'green', 'blue'].forEach(c => {
-          const opt = document.createElement('option');
-          opt.value = c;
-          opt.textContent = c.charAt(0).toUpperCase() + c.slice(1);
-          if (c === img.assignedColor) opt.selected = true;
-          colorSelect.appendChild(opt);
-        });
-
-        colorSelect.onchange = (e) => {
-          e.stopPropagation();
-          changeImageColor(img.id, e.target.value);
-        };
-
-        const closeBtn = document.createElement('button');
-        closeBtn.className = 'btn-close';
-        closeBtn.textContent = '✕';
-        closeBtn.title = 'Close Image';
-        closeBtn.onclick = (e) => closeImage(img.id, e);
-
-        controls.appendChild(colorSelect);
-        controls.appendChild(closeBtn);
-
-        item.appendChild(label);
-        item.appendChild(controls);
-        container.appendChild(item);
-      });
-    }
-
-    // --- Step 3: Scaling & Brightness Syncing ---
-    function setupScaleListeners() {
-      const sliderLow = document.getElementById('slider-low');
-      const inputLow = document.getElementById('input-low');
-      const sliderHigh = document.getElementById('slider-high');
-      const inputHigh = document.getElementById('input-high');
-
-      // Sync slider -> input box
-      sliderLow.oninput = () => { inputLow.value = sliderLow.value; applyScale(); };
-      sliderHigh.oninput = () => { inputHigh.value = sliderHigh.value; applyScale(); };
-
-      // Sync input box -> slider
-      inputLow.onchange = () => { sliderLow.value = inputLow.value; applyScale(); };
-      inputHigh.onchange = () => { sliderHigh.value = inputHigh.value; applyScale(); };
-
-      // Scale type toggle
-      document.querySelectorAll('input[name="scaleType"]').forEach(radio => {
-        radio.onchange = () => applyScale();
-      });
-    }
-
-    function updateImageScaleUI() {
-      if (!activeImageId) return;
-
-      const im = JS9.GetImage({ display: activeImageId });
-      if (!im) return;
-
-      const scaleInfo = JS9.GetScale({ display: activeImageId });
-      const imgData = JS9.GetImageData(false, { display: activeImageId });
-
-      if (imgData && scaleInfo) {
-        const dMin = imgData.datamin !== undefined ? imgData.datamin : scaleInfo.smin;
-        const dMax = imgData.datamax !== undefined ? imgData.datamax : scaleInfo.smax;
-
-        const sliderLow = document.getElementById('slider-low');
-        const inputLow = document.getElementById('input-low');
-        const sliderHigh = document.getElementById('slider-high');
-        const inputHigh = document.getElementById('input-high');
-
-        // Dynamically update limits according to active FITS pixel range
-        sliderLow.min = dMin; sliderLow.max = dMax;
-        sliderHigh.min = dMin; sliderHigh.max = dMax;
-
-        sliderLow.value = scaleInfo.smin;
-        inputLow.value = scaleInfo.smin;
-
-        sliderHigh.value = scaleInfo.smax;
-        inputHigh.value = scaleInfo.smax;
-
-        // Set scaling type radio
-        const currentScaleType = scaleInfo.scale || 'log';
-        const radio = document.querySelector(`input[name="scaleType"][value="${currentScaleType}"]`);
-        if (radio) radio.checked = true;
-      }
-    }
-
-    function applyScale() {
-      if (!activeImageId) return;
-
-      const scaleType = document.querySelector('input[name="scaleType"]:checked').value;
-      const smin = parseFloat(document.getElementById('input-low').value);
-      const smax = parseFloat(document.getElementById('input-high').value);
-
-      if (!isNaN(smin) && !isNaN(smax)) {
-        JS9.SetScale(scaleType, smin, smax, { display: activeImageId });
-      }
-    }
-
-    // --- Step 4: Labels / Regions ---
-    function addCircleRegion() {
-      if (activeImageId) JS9.AddRegions('circle', { display: activeImageId });
-    }
-
-    function addTextRegion() {
-      if (activeImageId) {
-        const text = prompt('Enter label text:', 'Target Star');
-        if (text) {
-          JS9.AddRegions('text', { text: text, display: activeImageId });
-        }
-      }
-    }
-
-    function clearAllRegions() {
-      if (activeImageId) JS9.RemoveRegions('all', { display: activeImageId });
-    }
-
-    // --- Step 5: Measure ---
-    function addLineRegion() {
-      if (activeImageId) JS9.AddRegions('line', { display: activeImageId });
-    }
-
-    function runRegionStats() {
-      if (activeImageId) JS9.RunAnalysis('regionstats', { display: activeImageId });
-    }
   </script>
 </body>
 </html>
