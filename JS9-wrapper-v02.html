@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JS9 Workbench - Step 1</title>
+
+  <!-- JS9 CSS (GitHub Repo via jsDelivr) -->
+  <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ericmandel/js9@master/js9support.css">
+  <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ericmandel/js9@master/js9.css">
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #121212;
+      color: #e0e0e0;
+      height: 100vh;
+      display: flex;
+      overflow: hidden;
+    }
+
+    /* Left Sidebar Container */
+    #sidebar {
+      width: 320px;
+      background-color: #1e1e1e;
+      border-right: 1px solid #333;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow-y: auto;
+      padding: 15px;
+      gap: 15px;
+    }
+
+    .app-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #61dafb;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #333;
+    }
+
+    /* Sidebar Step Sections */
+    .step-card {
+      background: #282828;
+      border: 1px solid #383838;
+      border-radius: 6px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .step-header {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .step-number {
+      background: #61dafb;
+      color: #121212;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: bold;
+    }
+
+    /* Inactive Control Elements for Layout */
+    button, select, input[type="range"] {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    button {
+      background: #3a3a3a;
+      color: #fff;
+      border: 1px solid #555;
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+    }
+
+    .range-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 0.75rem;
+      color: #aaa;
+    }
+
+    .range-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .range-row input[type="range"] { flex: 1; }
+    .range-row input[type="number"] {
+      width: 60px;
+      background: #181818;
+      border: 1px solid #444;
+      color: #fff;
+      padding: 3px;
+      border-radius: 3px;
+    }
+
+    .btn-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    /* Main Display Area */
+    #main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background-color: #050505;
+      padding: 15px;
+      overflow: auto;
+    }
+
+    #status-msg {
+      font-size: 0.85rem;
+      color: #888;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div id="sidebar">
+    <div class="app-title">JS9 Astronomy Workbench</div>
+
+    <!-- Step 1 -->
+    <div class="step-card">
+      <div class="step-header">
+        <span class="step-number">1</span>
+        <span>File Selection</span>
+      </div>
+      <button disabled>Select Image...</button>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="step-card">
+      <div class="step-header">
+        <span class="step-number">2</span>
+        <span>Loaded Images</span>
+      </div>
+      <div style="font-size: 0.8rem; color: #888;">No active image controls yet.</div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="step-card">
+      <div class="step-header">
+        <span class="step-number">3</span>
+        <span>Adjust Scaling</span>
+      </div>
+      <div style="font-size: 0.85rem;">
+        <label><input type="radio" name="scale" disabled checked> Logarithmic</label>
+        <label><input type="radio" name="scale" disabled> Linear</label>
+      </div>
+      <div class="range-group">
+        <label>Low Limit</label>
+        <div class="range-row">
+          <input type="range" disabled>
+          <input type="number" disabled placeholder="0">
+        </div>
+      </div>
+      <div class="range-group">
+        <label>High Limit</label>
+        <div class="range-row">
+          <input type="range" disabled>
+          <input type="number" disabled placeholder="1000">
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="step-card">
+      <div class="step-header">
+        <span class="step-number">4</span>
+        <span>Labels</span>
+      </div>
+      <div class="btn-grid">
+        <button disabled>Add Circle</button>
+        <button disabled>Add Text</button>
+      </div>
+      <button disabled>Delete All Regions</button>
+    </div>
+
+    <!-- Step 5 -->
+    <div class="step-card">
+      <div class="step-header">
+        <span class="step-number">5</span>
+        <span>Measure</span>
+      </div>
+      <div class="btn-grid">
+        <button disabled>Add Line</button>
+        <button disabled>Region Stats</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main JS9 Viewport -->
+  <div id="main-content">
+    <div id="status-msg">Initializing JS9 and reading manifest...</div>
+    
+    <div class="JS9Menubar" id="JS9Menubar"></div>
+    <div class="JS9" id="JS9"></div>
+  </div>
+
+  <!-- JS9 Scripts (GitHub Repo via jsDelivr) -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/ericmandel/js9@master/js9support.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/ericmandel/js9@master/js9.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/ericmandel/js9@master/js9plugins.js"></script>
+
+  <script>
+    // Read images.json and load the first image automatically
+    window.addEventListener('DOMContentLoaded', () => {
+      const statusMsg = document.getElementById('status-msg');
+
+      fetch('images.json')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`Failed to load images.json (HTTP ${response.status})`);
+          }
+          return response.json();
+        })
+        .then(data => {
+          const firstObject = data?.objects?.[0];
+          const firstImage = firstObject?.images?.[0];
+
+          if (firstImage && firstImage.file) {
+            statusMsg.textContent = `Loaded default image: ${firstObject.name || ''} (${firstImage.filter || ''}) - ${firstImage.file}`;
+            
+            // Load file into JS9
+            JS9.Load(firstImage.file);
+          } else {
+            statusMsg.textContent = 'Error: images.json was read, but no valid images were found.';
+          }
+        })
+        .catch(error => {
+          statusMsg.textContent = `Error: ${error.message}. Make sure images.json exists and you are running a local web server.`;
+          console.error(error);
+        });
+    });
+  </script>
+</body>
+</html>

@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>JS9 Workbench - Step 1</title>
 
-  <!-- JS9 CSS -->
-  <link type="text/css" rel="stylesheet" href="https://js9.si.edu/js9/js9support.css">
-  <link type="text/css" rel="stylesheet" href="https://js9.si.edu/js9/js9.css">
+  <!-- JS9 CSS (GitHub Repo via jsDelivr) -->
+  <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ericmandel/js9@master/js9support.css">
+  <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ericmandel/js9@master/js9.css">
 
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -75,7 +75,7 @@
       font-weight: bold;
     }
 
-    /* Placeholder / Inactive Control Elements */
+    /* Inactive Control Elements for Layout */
     button, select, input[type="range"] {
       opacity: 0.6;
       cursor: not-allowed;
@@ -139,7 +139,7 @@
 </head>
 <body>
 
-  <!-- Sidebar (Layout only for now) -->
+  <!-- Sidebar -->
   <div id="sidebar">
     <div class="app-title">JS9 Astronomy Workbench</div>
 
@@ -149,7 +149,7 @@
         <span class="step-number">1</span>
         <span>File Selection</span>
       </div>
-      <button disabled> Select Image...</button>
+      <button disabled>Select Image...</button>
     </div>
 
     <!-- Step 2 -->
@@ -221,10 +221,10 @@
     <div class="JS9" id="JS9"></div>
   </div>
 
-  <!-- JS9 Scripts -->
-  <script type="text/javascript" src="https://js9.si.edu/js9/js9support.min.js"></script>
-  <script type="text/javascript" src="https://js9.si.edu/js9/js9.min.js"></script>
-  <script type="text/javascript" src="https://js9.si.edu/js9/js9plugins.js"></script>
+  <!-- JS9 Scripts (GitHub Repo via jsDelivr) -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/ericmandel/js9@master/js9support.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/ericmandel/js9@master/js9.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/ericmandel/js9@master/js9plugins.js"></script>
 
   <script>
     // Read images.json and load the first image automatically
@@ -239,14 +239,13 @@
           return response.json();
         })
         .then(data => {
-          // Extract the first file path
           const firstObject = data?.objects?.[0];
           const firstImage = firstObject?.images?.[0];
 
           if (firstImage && firstImage.file) {
-            statusMsg.textContent = `Loading default image: ${firstObject.name || ''} (${firstImage.filter || ''}) - ${firstImage.file}`;
+            statusMsg.textContent = `Loaded default image: ${firstObject.name || ''} (${firstImage.filter || ''}) - ${firstImage.file}`;
             
-            // Send file to JS9 display
+            // Load file into JS9
             JS9.Load(firstImage.file);
           } else {
             statusMsg.textContent = 'Error: images.json was read, but no valid images were found.';
